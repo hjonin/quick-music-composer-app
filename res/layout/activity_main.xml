@@ -1,0 +1,95 @@
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainActivityGridLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="1"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/mainActivityTitle"
+        android:layout_column="0"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_row="0"
+        android:text="@string/app_name" />
+
+    <LinearLayout
+        android:id="@+id/verticalLinearLayout"
+        android:layout_column="0"
+        android:layout_gravity="center"
+        android:layout_row="0"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/horizontalLinearLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/guitarTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/guitar" />
+
+            <Button
+                android:id="@+id/guitarButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="0" />
+
+            <Button
+                android:id="@+id/guitarButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="1" />
+
+            <Button
+                android:id="@+id/guitarButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="2" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/horizontalLinearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/bassTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bass" />
+
+            <Button
+                android:id="@+id/bassButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="0" />
+
+            <Button
+                android:id="@+id/bassButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="1" />
+
+            <Button
+                android:id="@+id/bassButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="2" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/playButton"
+        android:layout_column="0"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_row="0"
+        android:text="Play" />
+
+</GridLayout>

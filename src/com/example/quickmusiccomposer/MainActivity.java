@@ -1,8 +1,5 @@
 package com.example.quickmusiccomposer;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -23,6 +20,13 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		guitarsArray = new String[MAX_TRACKS];
+		bassesArray = new String[MAX_TRACKS];
+		for (int i = 0; i < MAX_TRACKS; i++) {
+			guitarsArray[i] = "";
+			bassesArray[i] = "";
+		}
 		
 		// Create and set listeners on tracks
 		Button guitarTrack1 = (Button) findViewById(R.id.guitarButton1);
@@ -61,50 +65,13 @@ public class MainActivity extends Activity {
 		bassTrack3.setOnClickListener(bassTrackListener);
 		
 		// Play
-		guitarsArray = new String[MAX_TRACKS];
-		bassesArray = new String[MAX_TRACKS];
-		for (int i = 0; i < MAX_TRACKS; i++) {
-			guitarsArray[i] = "";
-			bassesArray[i] = "";
-		}
 		Button play = (Button) findViewById(R.id.playButton);
 		play.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				AudioTrackThread guitarThread;
-				AudioTrackThread bassThread;
-				List<Thread> threadsList = new CopyOnWriteArrayList<Thread>();
-				boolean retry;
-				
-				for (int i = 0; i < MAX_TRACKS; i++) {
-					if (!guitarsArray[i].equals("")) {
-						guitarThread = new AudioTrackThread(MainActivity.this, guitarsArray[i]);
-						guitarThread.start();
-						threadsList.add(guitarThread);
-					}
-					if (!bassesArray[i].equals("")) {
-						bassThread = new AudioTrackThread(MainActivity.this, bassesArray[i]);
-						bassThread.start();
-						threadsList.add(bassThread);
-					}
-					
-					// Join threads
-					for (Thread thread: threadsList) {
-						retry = true;
-						while (retry) {
-							try {
-								thread.join();
-								retry = false;
-								threadsList.remove(thread);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-								thread.interrupt();
-							}
-						}
-					}
-				}
+				PlayThread playThread = new PlayThread(MainActivity.this, guitarsArray, bassesArray);
+				playThread.start();
 			}
 		});
 	}

@@ -11,6 +11,12 @@ public class PlayThread extends Thread {
 	private String[] guitarsArray;
 	private String[] bassesArray;
 
+	public PlayThread(Context context, String[] guitarsArray, String[] bassesArray) {
+		this.context = context;
+		this.guitarsArray = guitarsArray;
+		this.bassesArray = bassesArray;
+	}
+
 	@Override
 	public void run() {
 		AudioTrackThread guitarThread;
@@ -41,7 +47,6 @@ public class PlayThread extends Thread {
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-						thread.interrupt();
 					}
 				}
 			}

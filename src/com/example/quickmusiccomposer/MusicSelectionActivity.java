@@ -16,25 +16,27 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class MusicSelectionActivity extends Activity implements MediaPlayer.OnPreparedListener {
+public class MusicSelectionActivity extends Activity implements
+		MediaPlayer.OnPreparedListener {
+	/**
+	 * Last item played
+	 */
 	private int lastPlayedPosition;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_music_selection);
-		
+
+		// Initialise musics array
 		final String[] guitarsArray = new String[] {
 				"guitar_1.wav",
 				"guitar_2.wav",
-				"guitar_3.wav"
-		};
+				"guitar_3.wav" };
 		final String[] bassesArray = new String[] {
 				"bass_1.wav",
 				"bass_2.wav",
-				"bass_3.wav"
-		};
-		
+				"bass_3.wav" };
 		String[] musicsArray = null;
 		String instrument = getIntent().getExtras().getString("Instrument");
 		// Switch instrument
@@ -43,50 +45,60 @@ public class MusicSelectionActivity extends Activity implements MediaPlayer.OnPr
 		} else if (instrument.equals("Bass")) {
 			musicsArray = bassesArray;
 		}
-		
+
+		// Initialise musics list
 		ListView musicsList = (ListView) findViewById(R.id.musicsList);
-		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				this, 
-				android.R.layout.simple_list_item_1,
-				android.R.id.text1,
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, android.R.id.text1,
 				musicsArray);
 		musicsList.setAdapter(adapter);
-		
+
+		// Set listener on item click
+		// Play item if first click
+		// Stop if second click
 		lastPlayedPosition = -1;
 		MyPlayer.getMediaPlayer().setAudioStreamType(AudioManager.STREAM_MUSIC);
-		MyPlayer.getMediaPlayer().setOnPreparedListener(MusicSelectionActivity.this);
+		MyPlayer.getMediaPlayer().setOnPreparedListener(
+				MusicSelectionActivity.this);
 		musicsList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
-				// If double click, stop player
-				if (MyPlayer.getMediaPlayer().isPlaying() && (position == lastPlayedPosition)) {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// If second click, stop playing
+				if (MyPlayer.getMediaPlayer().isPlaying()
+						&& (position == lastPlayedPosition)) {
 					stop();
 				} else {
+					// If click on another item, stop playing
 					if (MyPlayer.getMediaPlayer().isPlaying()) {
 						stop();
 					}
 					String filename = adapter.getItem(position);
 					play(filename);
 				}
-				lastPlayedPosition = position;
+				lastPlayedPosition = position; // Useful to know if second click
 			}
-			
+
 		});
-		
+
+		// Set listener on item long click
+		// Return selected item to main activity
 		musicsList.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position,long id) {
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
 				String filename = adapter.getItem(position);
-				Intent mainActivity = new Intent(MusicSelectionActivity.this, MainActivity.class);
+				Intent mainActivity = new Intent(MusicSelectionActivity.this,
+						MainActivity.class);
 				mainActivity.putExtra("Filename", filename);
 				setResult(RESULT_OK, mainActivity);
 				MusicSelectionActivity.this.finish();
 				return true;
 			}
 		});
-		
+
 	}
 
 	@Override
@@ -121,13 +133,16 @@ public class MusicSelectionActivity extends Activity implements MediaPlayer.OnPr
 
 	/**
 	 * Play file
-	 * @param filename (must be in assets)
+	 * 
+	 * @param filename
+	 *            The name of a file (must be in assets folder)
 	 */
 	private void play(String filename) {
 		AssetFileDescriptor afd = null;
 		try {
 			afd = getAssets().openFd(filename);
-			MyPlayer.getMediaPlayer().setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+			MyPlayer.getMediaPlayer().setDataSource(afd.getFileDescriptor(),
+					afd.getStartOffset(), afd.getLength());
 			MyPlayer.getMediaPlayer().prepareAsync();
 			afd.close();
 		} catch (IOException e) {

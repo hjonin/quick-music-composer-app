@@ -90,6 +90,6 @@
         android:layout_column="0"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_row="0"
-        android:text="Play" />
+        android:text="Play and export" />
 
 </GridLayout>

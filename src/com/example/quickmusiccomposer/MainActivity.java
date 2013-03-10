@@ -70,8 +70,8 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				PlayThread playThread = new PlayThread(MainActivity.this, guitarsArray, bassesArray);
-				playThread.start();
+				Thread att = new Thread(new AudioTrackThread(MainActivity.this, "guitar_1.wav", "bass_1.wav"));
+				att.start();
 			}
 		});
 	}

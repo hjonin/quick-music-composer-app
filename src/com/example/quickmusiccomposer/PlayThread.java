@@ -24,33 +24,36 @@ public class PlayThread extends Thread {
 		List<Thread> threadsList = new CopyOnWriteArrayList<Thread>();
 		boolean retry;
 		
-		for (int i = 0; i < MAX_TRACKS; i++) {
-			if (!guitarsArray[i].equals("")) {
-				guitarThread = new AudioTrackThread(context, guitarsArray[i]);
-				guitarThread.start();
-				threadsList.add(guitarThread);
-			}
-			if (!bassesArray[i].equals("")) {
-				bassThread = new AudioTrackThread(context, bassesArray[i]);
-				bassThread.start();
-				threadsList.add(bassThread);
-			}
-			
-			// Join threads
-			for (Thread thread: threadsList) {
-				retry = true;
-				while (retry) {
-					try {
-						thread.join();
-						retry = false;
-						threadsList.remove(thread);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		}
+		AudioTrackThread att = new AudioTrackThread(context, "guitar_1.wav", "bass_1.wav");
+		att.start();
+		
+//		for (int i = 0; i < MAX_TRACKS; i++) {
+//			if (!guitarsArray[i].equals("")) {
+//				guitarThread = new AudioTrackThread(context, guitarsArray[i]);
+//				guitarThread.start();
+//				threadsList.add(guitarThread);
+//			}
+//			if (!bassesArray[i].equals("")) {
+//				bassThread = new AudioTrackThread(context, bassesArray[i]);
+//				bassThread.start();
+//				threadsList.add(bassThread);
+//			}
+//			
+//			// Join threads
+//			for (Thread thread: threadsList) {
+//				retry = true;
+//				while (retry) {
+//					try {
+//						thread.join();
+//						retry = false;
+//						threadsList.remove(thread);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
+//			}
+//		}
 	}
 
 }

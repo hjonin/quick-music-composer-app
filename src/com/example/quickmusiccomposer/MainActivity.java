@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -23,7 +26,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// Initialise musics arrays
+		// Initialize musics arrays
 		guitarsArray = new String[MAX_TRACKS];
 		bassesArray = new String[MAX_TRACKS];
 		for (int i = 0; i < MAX_TRACKS; i++) {
@@ -76,6 +79,13 @@ public class MainActivity extends Activity {
 		bassTrack2.setOnClickListener(bassTrackListener);
 		guitarTrack3.setOnClickListener(guitarTrackListener);
 		bassTrack3.setOnClickListener(bassTrackListener);
+		
+		// Initialize AudioTrack thread
+		final AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100,
+				AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT,
+				AudioTrack.getMinBufferSize(44100,
+						AudioFormat.CHANNEL_OUT_MONO,
+						AudioFormat.ENCODING_PCM_16BIT), AudioTrack.MODE_STREAM);
 
 		// Set listener for playing music
 		Button play = (Button) findViewById(R.id.playButton);
@@ -83,10 +93,15 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Thread audioTrackThread = new AudioTrackThread(
-						MainActivity.this, guitarsArray, bassesArray,
-						MAX_TRACKS);
-				audioTrackThread.start();
+				// If second click, stop playing
+				if (audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
+					// TODO doesn't work
+				} else {
+					audioTrack.play();
+					byte[] music = MusicComposer.composeMusic(MainActivity.this, guitarsArray,
+							bassesArray, MAX_TRACKS);
+					audioTrack.write(music, 0, music.length);
+				}
 			}
 		});
 		

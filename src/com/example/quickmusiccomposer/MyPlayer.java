@@ -3,7 +3,7 @@ package com.example.quickmusiccomposer;
 import android.media.MediaPlayer;
 
 /**
- * Manage a single instance of MediaPlayer (for MusicSelectionActivity)
+ * Manage a single instance of MediaPlayer
  * 
  */
 public class MyPlayer {

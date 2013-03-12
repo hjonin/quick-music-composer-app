@@ -28,7 +28,7 @@ public class MusicSelectionActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_music_selection);
 
-		// Initialise musics array
+		// Initialize musics array
 		final String[] guitarsArray = new String[] {
 				"guitar_1.wav",
 				"guitar_2.wav",
@@ -46,7 +46,7 @@ public class MusicSelectionActivity extends Activity implements
 			musicsArray = bassesArray;
 		}
 
-		// Initialise musics list
+		// Initialize musics list
 		ListView musicsList = (ListView) findViewById(R.id.musicsList);
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, android.R.id.text1,

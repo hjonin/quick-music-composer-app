@@ -17,7 +17,6 @@ import android.os.Environment;
  *
  */
 public class MusicComposer {
-	private static final int FILE_SIZE = 882044; // File size in bytes ---> TO CHANGE
 
 	private MusicComposer() {
 	}
@@ -34,19 +33,32 @@ public class MusicComposer {
 	public static byte[] composeMusic(Context context, String[] guitarsArray,
 			String[] bassesArray, int numberOfTracks) {
 		ByteArrayOutputStream finalArray = new ByteArrayOutputStream();
+		int emptyCounter = 0;
 
 		for (int i = 0; i < numberOfTracks; i++) {
 			byte[] mixedArray;
 			try {
 				// Mix the two files together
 				mixedArray = mixFiles(context, guitarsArray[i], bassesArray[i]);
-
-				// Copy the result into the final array
-				finalArray.write(mixedArray);
+				
+				// If no array, create an empty new one
+				if (mixedArray == null) {
+					finalArray.write(new byte[882044]); // Size of each file containing music loop
+					emptyCounter++; // Increment counter of empty arrays to know if final array is empty
+				}
+				else {
+					// Copy the result into the final array
+					finalArray.write(mixedArray);
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		
+		// If all arrays are empty, return null
+		if (emptyCounter == numberOfTracks) {
+			return null;
 		}
 
 		return finalArray.toByteArray();
@@ -63,13 +75,19 @@ public class MusicComposer {
 	 */
 	public static boolean export(Context context, String[] guitarsArray,
 			String[] bassesArray, int numberOfTracks) {
+		byte[] music = composeMusic(context, guitarsArray,
+				bassesArray, numberOfTracks);
+		// If music is empty, no point exporting
+		if (music == null) {
+			return false;
+		}
+		
 		File file = new File(Environment.getExternalStorageDirectory(),
 				"MyMusic");
 		FileOutputStream fileOutputStream;
 		try {
 			fileOutputStream = new FileOutputStream(file);
-			fileOutputStream.write(composeMusic(context, guitarsArray,
-					bassesArray, numberOfTracks));
+			fileOutputStream.write(music);
 			fileOutputStream.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -79,7 +97,7 @@ public class MusicComposer {
 			e.printStackTrace();
 		}
 
-		return true;
+		return true; // TODO change location
 	}
 
 	/**
@@ -94,19 +112,9 @@ public class MusicComposer {
 	private static byte[] mixFiles(Context context, String filename1,
 			String filename2) throws IOException {
 		byte[] bytesArray1, bytesArray2;
-		// If file added, convert into byte array
-		if (!filename1.equals("")) {
-			bytesArray1 = fileToBytesArray(context, filename1);
-		} else {
-			// Else initialize a byte array (big enough)
-			bytesArray1 = new byte[FILE_SIZE];
-		}
-		// Same
-		if (!filename2.equals("")) {
-			bytesArray2 = fileToBytesArray(context, filename2);
-		} else {
-			bytesArray2 = new byte[FILE_SIZE];
-		}
+		// Convert files into bytes arrays
+		bytesArray1 = fileToBytesArray(context, filename1);
+		bytesArray2 = fileToBytesArray(context, filename2);
 
 		// Mix the two arrays together
 		byte[] mixedArray = mixBytesArray(45, bytesArray1, bytesArray2); // 45 = offset to skip header of wav file
@@ -124,6 +132,18 @@ public class MusicComposer {
 	 */
 	private static byte[] mixBytesArray(int offset, byte[] bytesArray1,
 			byte[] bytesArray2) {
+		// If the two arrays are null, return null
+		if (bytesArray1 == null && bytesArray2 == null) {
+			return null;
+		}
+		// If one of the array is null, return the other
+		if (bytesArray1 == null) {
+			return bytesArray2;
+		}
+		if (bytesArray2 == null) {
+			return bytesArray1;
+		}
+		
 		int minLength = bytesArray1.length < bytesArray2.length ? bytesArray1.length
 				: bytesArray2.length;
 		int intBucket = 0;
@@ -149,6 +169,11 @@ public class MusicComposer {
 	 */
 	private static byte[] fileToBytesArray(Context context, String filename)
 			throws IOException {
+		// If no file, return null
+		if (filename.isEmpty()) {
+			return null;
+		}
+		
 		InputStream inputStream = context.getAssets().open(filename);
 		byte[] bytesArray = new byte[inputStream.available()];
 		BufferedInputStream bufferedInputStream = new BufferedInputStream(

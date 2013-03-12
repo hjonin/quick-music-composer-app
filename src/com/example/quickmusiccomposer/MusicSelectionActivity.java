@@ -134,8 +134,7 @@ public class MusicSelectionActivity extends Activity implements
 	/**
 	 * Play file
 	 * 
-	 * @param filename
-	 *            The name of a file (must be in assets folder)
+	 * @param filename The name of a file (must be in assets folder)
 	 */
 	private void play(String filename) {
 		AssetFileDescriptor afd = null;

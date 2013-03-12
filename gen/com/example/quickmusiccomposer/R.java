@@ -24,11 +24,12 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f090014;
+        public static final int action_settings=0x7f090015;
         public static final int bassButton1=0x7f09000a;
         public static final int bassButton2=0x7f09000b;
         public static final int bassButton3=0x7f09000c;
         public static final int bassTextView=0x7f090009;
+        public static final int exportButton=0x7f09000e;
         public static final int guitarButton1=0x7f090005;
         public static final int guitarButton2=0x7f090006;
         public static final int guitarButton3=0x7f090007;
@@ -37,13 +38,13 @@ public final class R {
         public static final int horizontalLinearLayout2=0x7f090008;
         public static final int mainActivityGridLayout=0x7f090000;
         public static final int mainActivityTitle=0x7f090001;
-        public static final int menu_settings=0x7f090013;
-        public static final int musicSelectionLinearLayout=0x7f09000e;
-        public static final int musicsList=0x7f09000f;
+        public static final int menu_settings=0x7f090014;
+        public static final int musicSelectionLinearLayout=0x7f09000f;
+        public static final int musicsList=0x7f090010;
         public static final int playButton=0x7f09000d;
-        public static final int startActivityGridLayout=0x7f090010;
-        public static final int startActivityTitle=0x7f090011;
-        public static final int startButton=0x7f090012;
+        public static final int startActivityGridLayout=0x7f090011;
+        public static final int startActivityTitle=0x7f090012;
+        public static final int startButton=0x7f090013;
         public static final int verticalLinearLayout=0x7f090002;
     }
     public static final class layout {

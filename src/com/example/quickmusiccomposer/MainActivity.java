@@ -89,6 +89,16 @@ public class MainActivity extends Activity {
 				audioTrackThread.start();
 			}
 		});
+		
+		// Set listener for exporting music
+		Button export = (Button) findViewById(R.id.exportButton);
+		export.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				MusicComposer.export(MainActivity.this, guitarsArray, bassesArray, MAX_TRACKS);
+			}
+		});
 	}
 
 	@Override
@@ -127,10 +137,8 @@ public class MainActivity extends Activity {
 	/**
 	 * On track click event
 	 * 
-	 * @param instrument
-	 *            The instrument that triggers the event
-	 * @param requestCode
-	 *            The corresponding request code
+	 * @param instrument The instrument that triggers the event
+	 * @param requestCode The corresponding request code
 	 */
 	private void onTrackClick(String instrument, int requestCode) {
 		Intent musicSelectionActivity = new Intent(MainActivity.this,

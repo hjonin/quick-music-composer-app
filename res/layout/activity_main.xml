@@ -1,102 +1,113 @@
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainActivityGridLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:columnCount="1"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity"
+    android:background="@drawable/backrepeat" >
 
     <TextView
-        android:id="@+id/mainActivityTitle"
         android:layout_column="0"
         android:layout_gravity="center_horizontal|top"
         android:layout_row="0"
-        android:text="@string/app_name" />
+        android:text="@string/app_name"
+        android:textColor="@android:color/white" />
 
     <LinearLayout
-        android:id="@+id/verticalLinearLayout"
         android:layout_column="0"
         android:layout_gravity="center"
         android:layout_row="0"
         android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/horizontalLinearLayout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
             <TextView
-                android:id="@+id/guitarTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/guitar" />
+                android:text="@string/guitar"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/guitarButton1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="0" />
+                android:tag="0"
+                android:background="@drawable/button_custom" />
 
             <Button
                 android:id="@+id/guitarButton2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="1" />
+                android:tag="1"
+                android:background="@drawable/button_custom" />
 
             <Button
                 android:id="@+id/guitarButton3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="2" />
+                android:tag="2"
+                android:background="@drawable/button_custom" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/horizontalLinearLayout2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+             >
 
             <TextView
-                android:id="@+id/bassTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/bass" />
+                android:text="@string/bass"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/bassButton1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="0" />
+                android:tag="0"
+                android:background="@drawable/button_custom" />
 
             <Button
                 android:id="@+id/bassButton2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="1" />
+                android:tag="1"
+                android:background="@drawable/button_custom" />
 
             <Button
                 android:id="@+id/bassButton3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="2" />
+                android:tag="2"
+                android:background="@drawable/button_custom" />
 
         </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/playButton"
+    <LinearLayout
         android:layout_column="0"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_row="0"
-        android:text="Play" />
+        android:layout_row="0" >
 
-    <Button
-        android:id="@+id/exportButton"
-        android:layout_column="0"
-        android:layout_gravity="right|top"
-        android:layout_row="0"
-        android:text="Export" />
+        <Button
+            android:id="@+id/playButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_custom"
+            android:text="@string/play" />
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_custom"
+            android:text="@string/save" />
+
+    </LinearLayout>
 
 </GridLayout>

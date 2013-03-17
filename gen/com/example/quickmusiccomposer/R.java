@@ -21,31 +21,29 @@ public final class R {
         public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int background=0x7f020000;
+        public static final int backrepeat=0x7f020001;
+        public static final int button_custom=0x7f020002;
+        public static final int button_default=0x7f020003;
+        public static final int button_focused=0x7f020004;
+        public static final int button_pressed=0x7f020005;
+        public static final int button_selected_bass=0x7f020006;
+        public static final int button_selected_guitar=0x7f020007;
+        public static final int ic_launcher=0x7f020008;
     }
     public static final class id {
-        public static final int action_settings=0x7f090015;
-        public static final int bassButton1=0x7f09000a;
-        public static final int bassButton2=0x7f09000b;
-        public static final int bassButton3=0x7f09000c;
-        public static final int bassTextView=0x7f090009;
-        public static final int exportButton=0x7f09000e;
-        public static final int guitarButton1=0x7f090005;
-        public static final int guitarButton2=0x7f090006;
-        public static final int guitarButton3=0x7f090007;
-        public static final int guitarTextView=0x7f090004;
-        public static final int horizontalLinearLayout1=0x7f090003;
-        public static final int horizontalLinearLayout2=0x7f090008;
-        public static final int mainActivityGridLayout=0x7f090000;
-        public static final int mainActivityTitle=0x7f090001;
-        public static final int menu_settings=0x7f090014;
-        public static final int musicSelectionLinearLayout=0x7f09000f;
-        public static final int musicsList=0x7f090010;
-        public static final int playButton=0x7f09000d;
-        public static final int startActivityGridLayout=0x7f090011;
-        public static final int startActivityTitle=0x7f090012;
-        public static final int startButton=0x7f090013;
-        public static final int verticalLinearLayout=0x7f090002;
+        public static final int action_settings=0x7f09000b;
+        public static final int bassButton1=0x7f090003;
+        public static final int bassButton2=0x7f090004;
+        public static final int bassButton3=0x7f090005;
+        public static final int guitarButton1=0x7f090000;
+        public static final int guitarButton2=0x7f090001;
+        public static final int guitarButton3=0x7f090002;
+        public static final int menu_settings=0x7f09000a;
+        public static final int musicsList=0x7f090008;
+        public static final int playButton=0x7f090006;
+        public static final int saveButton=0x7f090007;
+        public static final int startButton=0x7f090009;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -72,6 +70,8 @@ public final class R {
         public static final int bass=0x7f060007;
         public static final int guitar=0x7f060006;
         public static final int menu_settings=0x7f060001;
+        public static final int play=0x7f060008;
+        public static final int save=0x7f060009;
         public static final int start=0x7f060002;
         public static final int title_activity_main=0x7f060003;
         public static final int title_activity_music_selection=0x7f060005;

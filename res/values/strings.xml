@@ -9,5 +9,7 @@
     <string name="title_activity_music_selection">MusicSelectionActivity</string>
     <string name="guitar">Guitar</string>
     <string name="bass">Bass</string>
+    <string name="play">Play</string>
+    <string name="save">Save</string>
 
 </resources>

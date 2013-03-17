@@ -48,8 +48,10 @@ public class MusicSelectionActivity extends Activity implements
 
 		// Initialize musics list
 		ListView musicsList = (ListView) findViewById(R.id.musicsList);
-		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, android.R.id.text1,
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				this,
+				android.R.layout.simple_list_item_1, 
+				android.R.id.text1,
 				musicsArray);
 		musicsList.setAdapter(adapter);
 

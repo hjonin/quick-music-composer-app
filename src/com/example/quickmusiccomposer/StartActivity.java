@@ -14,10 +14,11 @@ public class StartActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
-
+		
 		Button startButton = (Button) findViewById(R.id.startButton);
 		startButton.setOnClickListener(new OnClickListener() {
 
+			@Override
 			public void onClick(View v) {
 				Intent mainActivity = new Intent(StartActivity.this,
 						MainActivity.class);

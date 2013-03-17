@@ -13,7 +13,7 @@ import android.content.Context;
 import android.os.Environment;
 
 /**
- * Contains methods to compose and export music
+ * Contains methods to compose and save music
  *
  */
 public class MusicComposer {
@@ -73,11 +73,11 @@ public class MusicComposer {
 	 * @param numberOfTracks The number of tracks
 	 * @return True if it worked
 	 */
-	public static boolean export(Context context, String[] guitarsArray,
+	public static boolean save(Context context, String[] guitarsArray,
 			String[] bassesArray, int numberOfTracks) {
 		byte[] music = composeMusic(context, guitarsArray,
 				bassesArray, numberOfTracks);
-		// If music is empty, no point exporting
+		// If music is empty, no point saving
 		if (music == null) {
 			return false;
 		}

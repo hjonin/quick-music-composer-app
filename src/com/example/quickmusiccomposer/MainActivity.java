@@ -2,16 +2,16 @@ package com.example.quickmusiccomposer;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private static final int GUITAR_REQ_CODE = 1;
@@ -20,6 +20,7 @@ public class MainActivity extends Activity {
 	private View selectedTrack;
 	private String[] guitarsArray;
 	private String[] bassesArray;
+	PlayAsyncTask playAsyncTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +50,7 @@ public class MainActivity extends Activity {
 				// If second click, remove music
 				if (!guitarsArray[trackNumber].equals("")) {
 					guitarsArray[trackNumber] = "";
-					v.getBackground().setColorFilter(Color.GRAY,
-							PorterDuff.Mode.MULTIPLY);
+					v.setBackgroundResource(R.drawable.button_custom);
 				} else {
 					// Else go to music selection
 					onTrackClick("Guitar", GUITAR_REQ_CODE);
@@ -65,8 +65,7 @@ public class MainActivity extends Activity {
 				int trackNumber = Integer.parseInt((String) v.getTag());
 				if (!bassesArray[trackNumber].equals("")) {
 					bassesArray[trackNumber] = "";
-					v.getBackground().setColorFilter(Color.GRAY,
-							PorterDuff.Mode.MULTIPLY);
+					v.setBackgroundResource(R.drawable.button_custom);
 				} else {
 					onTrackClick("Bass", BASS_REQ_CODE);
 					selectedTrack = v;
@@ -80,38 +79,37 @@ public class MainActivity extends Activity {
 		guitarTrack3.setOnClickListener(guitarTrackListener);
 		bassTrack3.setOnClickListener(bassTrackListener);
 		
-		// Initialize AudioTrack thread
-		final AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100,
-				AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT,
-				AudioTrack.getMinBufferSize(44100,
-						AudioFormat.CHANNEL_OUT_MONO,
-						AudioFormat.ENCODING_PCM_16BIT), AudioTrack.MODE_STREAM);
-
 		// Set listener for playing music
-		Button play = (Button) findViewById(R.id.playButton);
-		play.setOnClickListener(new OnClickListener() {
+		Button playButton = (Button) findViewById(R.id.playButton);
+		playButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// If second click, stop playing
-				if (audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
-					// TODO doesn't work
+				if ((playAsyncTask != null) && (playAsyncTask.getStatus() == AsyncTask.Status.RUNNING)) {
+					;
 				} else {
-					audioTrack.play();
+					playAsyncTask = new PlayAsyncTask();
 					byte[] music = MusicComposer.composeMusic(MainActivity.this, guitarsArray,
 							bassesArray, MAX_TRACKS);
-					audioTrack.write(music, 0, music.length);
+					if (music != null) {
+						playAsyncTask.execute(music);
+					}
 				}
 			}
 		});
 		
-		// Set listener for exporting music
-		Button export = (Button) findViewById(R.id.exportButton);
-		export.setOnClickListener(new OnClickListener() {
+		// Set listener for saving music
+		Button saveButton = (Button) findViewById(R.id.saveButton);
+		saveButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				MusicComposer.export(MainActivity.this, guitarsArray, bassesArray, MAX_TRACKS);
+				if (MusicComposer.save(MainActivity.this, guitarsArray, bassesArray, MAX_TRACKS)) {
+					Toast.makeText(MainActivity.this, "Music saved", Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(MainActivity.this, "Failed to save music", Toast.LENGTH_LONG).show();
+				}
 			}
 		});
 	}
@@ -132,21 +130,16 @@ public class MainActivity extends Activity {
 			switch (requestCode) {
 			case GUITAR_REQ_CODE:
 				guitarsArray[trackNumber] = filename;
+				selectedTrack.setBackgroundResource(R.drawable.button_selected_guitar);
 				break;
 			case BASS_REQ_CODE:
 				bassesArray[trackNumber] = filename;
+				selectedTrack.setBackgroundResource(R.drawable.button_selected_bass);
 				break;
 			default:
 				break;
 			}
-			selectedTrack.getBackground().setColorFilter(Color.RED,
-					PorterDuff.Mode.MULTIPLY);
 		}
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
 	}
 
 	/**
@@ -161,5 +154,29 @@ public class MainActivity extends Activity {
 		musicSelectionActivity.putExtra("Instrument", instrument);
 		startActivityForResult(musicSelectionActivity, requestCode);
 	}
+	
+	private class PlayAsyncTask extends AsyncTask<byte[], Void, Void> {
+		AudioTrack audioTrack;
+
+		@Override
+		protected Void doInBackground(byte[]... params) {
+			audioTrack.play();
+			audioTrack.write(params[0], 0, params[0].length);
+			return null;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			audioTrack = new AudioTrack(
+					AudioManager.STREAM_MUSIC, 44100,
+					AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT,
+					AudioTrack.getMinBufferSize(
+							44100,
+							AudioFormat.CHANNEL_OUT_MONO,
+							AudioFormat.ENCODING_PCM_16BIT), 
+					AudioTrack.MODE_STREAM);
+		}
+		
+	 }
 
 }

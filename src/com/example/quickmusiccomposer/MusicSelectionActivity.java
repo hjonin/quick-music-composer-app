@@ -18,41 +18,31 @@ import android.widget.ListView;
 
 public class MusicSelectionActivity extends Activity implements
 		MediaPlayer.OnPreparedListener {
-	/**
-	 * Last item played
-	 */
-	private int lastPlayedPosition;
+	private int lastPlayedPosition; // Last item played
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_music_selection);
 
-		// Initialize musics array
-		final String[] guitarsArray = new String[] {
-				"guitar_1.wav",
-				"guitar_2.wav",
-				"guitar_3.wav" };
-		final String[] bassesArray = new String[] {
-				"bass_1.wav",
-				"bass_2.wav",
-				"bass_3.wav" };
-		String[] musicsArray = null;
+		// Initialize samples array
 		String instrument = getIntent().getExtras().getString("Instrument");
-		// Switch instrument
-		if (instrument.equals("Guitar")) {
-			musicsArray = guitarsArray;
-		} else if (instrument.equals("Bass")) {
-			musicsArray = bassesArray;
+		String[] samplesArray = null;
+		// Each sample is in a subfolder of samples folder
+		// Called with the name of the instrument
+		final String samplePath = "samples/" + instrument;
+		try {
+			samplesArray = getAssets().list(samplePath);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
-		// Initialize musics list
+		// Initialize samples list
 		ListView musicsList = (ListView) findViewById(R.id.musicsList);
-		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				this,
-				android.R.layout.simple_list_item_1, 
-				android.R.id.text1,
-				musicsArray);
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, android.R.id.text1,
+				samplesArray);
 		musicsList.setAdapter(adapter);
 
 		// Set listener on item click
@@ -76,10 +66,11 @@ public class MusicSelectionActivity extends Activity implements
 					if (MyPlayer.getMediaPlayer().isPlaying()) {
 						stop();
 					}
+					// Then play item
 					String filename = adapter.getItem(position);
 					play(filename);
 				}
-				lastPlayedPosition = position; // Useful to know if second click
+				lastPlayedPosition = position; // Flag for second click
 			}
 
 		});
@@ -94,7 +85,7 @@ public class MusicSelectionActivity extends Activity implements
 				String filename = adapter.getItem(position);
 				Intent mainActivity = new Intent(MusicSelectionActivity.this,
 						MainActivity.class);
-				mainActivity.putExtra("Filename", filename);
+				mainActivity.putExtra("Filename", samplePath + "/" + filename);
 				setResult(RESULT_OK, mainActivity);
 				MusicSelectionActivity.this.finish();
 				return true;
@@ -136,7 +127,8 @@ public class MusicSelectionActivity extends Activity implements
 	/**
 	 * Play file
 	 * 
-	 * @param filename The name of a file (must be in assets folder)
+	 * @param filename
+	 *            The name of a file (must be in assets folder)
 	 */
 	private void play(String filename) {
 		AssetFileDescriptor afd = null;

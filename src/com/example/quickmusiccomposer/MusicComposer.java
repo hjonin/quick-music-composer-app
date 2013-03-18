@@ -13,7 +13,7 @@ import android.content.Context;
 import android.os.Environment;
 
 /**
- * Contains methods to compose and save music
+ * Contains utility methods to compose and save music
  *
  */
 public class MusicComposer {

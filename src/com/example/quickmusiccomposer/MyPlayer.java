@@ -7,16 +7,17 @@ import android.media.MediaPlayer;
  * 
  */
 public class MyPlayer {
-	private static MediaPlayer mediaPlayer = new MediaPlayer();
+	private static MediaPlayer mediaPlayer = new MediaPlayer(); // Initialize static MediaPlayer
 
 	private MyPlayer() {
-
+		// Private constructor
+		// Because unnecessary
 	}
 
 	/**
 	 * Get instance of MediaPlayer
 	 * 
-	 * @return MediaPlayer
+	 * @return MediaPlayer The instance of MediaPlayer
 	 */
 	public static MediaPlayer getMediaPlayer() {
 		return mediaPlayer;

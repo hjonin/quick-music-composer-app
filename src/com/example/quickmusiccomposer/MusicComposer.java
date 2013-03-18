@@ -17,76 +17,77 @@ import android.os.Environment;
  *
  */
 public class MusicComposer {
+	private static final int SAMPLE_FILE_SIZE = 882044; // bytes
 
-	private MusicComposer() {
+	private MusicComposer() { 
+		// Private constructor because static class
 	}
 
 	/**
-	 * Compose music (mix loops)
+	 * Compose music (mix samples)
 	 * 
 	 * @param context The context of the application
-	 * @param guitarsArray The array of guitar loops file names
-	 * @param bassesArray The array of basses loops file names
-	 * @param numberOfTracks The number of tracks
-	 * @return The mixed bytes array
+	 * @param samplesArray1 An array of samples filenames
+	 * @param samplesArray2 Another array of samples filenames
+	 * @param maxTracks The number of tracks
+	 * @return The music bytes array
 	 */
-	public static byte[] composeMusic(Context context, String[] guitarsArray,
-			String[] bassesArray, int numberOfTracks) {
-		ByteArrayOutputStream finalArray = new ByteArrayOutputStream();
-		int emptyCounter = 0;
+	public static byte[] composeMusic(Context context, String[] samplesArray1,
+			String[] samplesArray2, int maxTracks) {
+		ByteArrayOutputStream musicArrayOutputStream = new ByteArrayOutputStream();
+		int emptyCounter = 0; // Counter of empty arrays
 
-		for (int i = 0; i < numberOfTracks; i++) {
+		for (int i = 0; i < maxTracks; i++) {
 			byte[] mixedArray;
 			try {
 				// Mix the two files together
-				mixedArray = mixFiles(context, guitarsArray[i], bassesArray[i]);
-				
-				// If no array, create an empty new one
+				mixedArray = mixFiles(context, samplesArray1[i], samplesArray2[i]);
+				// If there were no files (mixed array null), create an empty array (pause in the music)
 				if (mixedArray == null) {
-					finalArray.write(new byte[882044]); // Size of each file containing music loop
-					emptyCounter++; // Increment counter of empty arrays to know if final array is empty
+					musicArrayOutputStream.write(new byte[SAMPLE_FILE_SIZE]);
+					emptyCounter++;
 				}
 				else {
-					// Copy the result into the final array
-					finalArray.write(mixedArray);
+					// Copy the result into the music array
+					musicArrayOutputStream.write(mixedArray);
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
-		// If all arrays are empty, return null
-		if (emptyCounter == numberOfTracks) {
+
+		// If every array is empty, no music so return null
+		if (emptyCounter == maxTracks) {
 			return null;
 		}
 
-		return finalArray.toByteArray();
+		return musicArrayOutputStream.toByteArray();
 	}
 
 	/**
 	 * Write music into a file
 	 * 
 	 * @param context The context of the application
-	 * @param guitarsArray The array of guitar loops file names
-	 * @param bassesArray The array of basses loops file names
-	 * @param numberOfTracks The number of tracks
-	 * @return True if it worked
+	 * @param samplesArray1 An array of samples filenames
+	 * @param samplesArray2 Another array of samples filenames
+	 * @param maxTracks The number of tracks
+	 * @return True if the music has been saved, false otherwise
 	 */
-	public static boolean save(Context context, String[] guitarsArray,
-			String[] bassesArray, int numberOfTracks) {
-		byte[] music = composeMusic(context, guitarsArray,
-				bassesArray, numberOfTracks);
+	public static boolean save(Context context, String[] samplesArray1,
+			String[] samplesArray2, int maxTracks) {
+		byte[] music = composeMusic(context, samplesArray1,
+				samplesArray2, maxTracks);
+
 		// If music is empty, no point saving
 		if (music == null) {
 			return false;
 		}
-		
-		File file = new File(Environment.getExternalStorageDirectory(),
-				"MyMusic");
+
 		FileOutputStream fileOutputStream;
 		try {
-			fileOutputStream = new FileOutputStream(file);
+			fileOutputStream = new FileOutputStream(new File(Environment.getExternalStorageDirectory(),
+					"MyMusic"));
 			fileOutputStream.write(music);
 			fileOutputStream.close();
 		} catch (FileNotFoundException e) {
@@ -97,7 +98,7 @@ public class MusicComposer {
 			e.printStackTrace();
 		}
 
-		return true; // TODO change location
+		return true;
 	}
 
 	/**
@@ -111,15 +112,7 @@ public class MusicComposer {
 	 */
 	private static byte[] mixFiles(Context context, String filename1,
 			String filename2) throws IOException {
-		byte[] bytesArray1, bytesArray2;
-		// Convert files into bytes arrays
-		bytesArray1 = fileToBytesArray(context, filename1);
-		bytesArray2 = fileToBytesArray(context, filename2);
-
-		// Mix the two arrays together
-		byte[] mixedArray = mixBytesArray(45, bytesArray1, bytesArray2); // 45 = offset to skip header of wav file
-
-		return mixedArray;
+		return mixBytesArray(45, fileToBytesArray(context, filename1), fileToBytesArray(context, filename2)); // 45 = offset to skip header of wav file
 	}
 
 	/**
@@ -136,6 +129,7 @@ public class MusicComposer {
 		if (bytesArray1 == null && bytesArray2 == null) {
 			return null;
 		}
+
 		// If one of the array is null, return the other
 		if (bytesArray1 == null) {
 			return bytesArray2;
@@ -143,9 +137,9 @@ public class MusicComposer {
 		if (bytesArray2 == null) {
 			return bytesArray1;
 		}
-		
+
 		int minLength = bytesArray1.length < bytesArray2.length ? bytesArray1.length
-				: bytesArray2.length;
+				: bytesArray2.length; // In fact, the two arrays should have the same length
 		int intBucket = 0;
 		byte[] mixedArray = new byte[minLength];
 		for (int i = offset; i < minLength; i++) {
@@ -173,13 +167,11 @@ public class MusicComposer {
 		if (filename.isEmpty()) {
 			return null;
 		}
-		
+
 		InputStream inputStream = context.getAssets().open(filename);
 		byte[] bytesArray = new byte[inputStream.available()];
-		BufferedInputStream bufferedInputStream = new BufferedInputStream(
-				inputStream);
 		DataInputStream dataInputStream = new DataInputStream(
-				bufferedInputStream);
+				new BufferedInputStream(inputStream));
 		dataInputStream.read(bytesArray);
 		inputStream.close();
 		return bytesArray;

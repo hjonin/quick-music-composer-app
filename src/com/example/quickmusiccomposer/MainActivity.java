@@ -116,8 +116,8 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
-			String filename = data.getStringExtra("Filename");
 			int trackNumber = Integer.parseInt((String) selectedTrack.getTag());
+			String filename = data.getStringExtra("Filename");
 			// Check which request we're responding to
 			switch (requestCode) {
 			case 0: // Guitar
@@ -152,6 +152,8 @@ public class MainActivity extends Activity {
 					MainActivity.this,
 					MusicSelectionActivity.class);
 			musicSelectionActivity.putExtra("Instrument", instrument.toString());
+			// Request code can't be an instrument (should be int)
+			// Give enum ordinal instead
 			startActivityForResult(musicSelectionActivity, instrument.ordinal());
 			selectedTrack = v;
 		}
